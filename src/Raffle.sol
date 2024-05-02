@@ -20,9 +20,9 @@
 // internal & private view & pure functions
 // external & public view & pure functions
 
-// SPDX-License-Identifier: MIT
-
 //CHECKS >> EFFECTS >> INTERACTIONS
+
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.16;
 
@@ -92,7 +92,7 @@ contract Raffle is VRFConsumerBaseV2 {
     }
 
     function enterRaffle() external payable {
-        require(msg.value >= i_entranceFee, "Not enough ETH sent.");
+        // require(msg.value >= i_entranceFee, "Not enough ETH sent.");
         if (msg.value < i_entranceFee) {
             revert Raffle__NotEnoughEthSent();
         }
@@ -106,11 +106,11 @@ contract Raffle is VRFConsumerBaseV2 {
     /**
      *
      * @dev CheckUpKeep function returns when the winner will be picked
-     * The following sgould be true for the function to return true:
-     * 1. The time intervals has passed between raffle runs.
-     * 2. The raffle is in OPEN state.
-     * 3. The contract has ETH (aka, players)
-     * 4. (Inplicit) The subscription is funded with LINK.
+     * @dev The following should be true for the function to return true:
+     * @dev 1. The time intervals has passed between raffle runs.
+     * @dev 2. The raffle is in OPEN state.
+     * @dev 3. The contract has ETH (aka, players)
+     * @dev 4. (Inplicit) The subscription is funded with LINK.
      */
     function checkUpKeep(
         bytes memory /*checkData*/
@@ -123,7 +123,7 @@ contract Raffle is VRFConsumerBaseV2 {
         return (upKeepNeeded, "0x0");
     }
 
-    //GET a random number > use random number to pick a player > ba automatically called
+    //GET a random number > use random number to pick a player > be automatically called
     // Use Chainlink VRF (Verifiable Randomness Function)
     function performUpkeep(bytes calldata /* performData */) external {
         (bool upkeepNeeded, ) = checkUpKeep("");
@@ -174,4 +174,13 @@ contract Raffle is VRFConsumerBaseV2 {
     function getEntranceFee() external view returns (uint256) {
         return i_entranceFee;
     }
+
+    function getRaffleState() external view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    function getPlayer(uint256 indexOfPlayer) external view returns(address){
+        return s_players[indexOfPlayer];
+    }
+    
 }
